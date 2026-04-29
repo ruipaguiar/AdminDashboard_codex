@@ -1,10 +1,10 @@
 import { expect, test } from "@playwright/test";
 
 test("dashboard opens and navigates through main views", async ({ page }) => {
-  await page.route("http://localhost:6000/api/auth/me", async (route) => {
+  await page.route("http://localhost:6002/api/auth/me", async (route) => {
     await route.fulfill({ json: { email: "ruipaguiar@gmail.com" } });
   });
-  await page.route("http://localhost:6000/api/market-data/bitcoin?**", async (route) => {
+  await page.route("http://localhost:6002/api/market-data/bitcoin?**", async (route) => {
     await route.fulfill({
       json: {
         coinId: "bitcoin",
@@ -30,7 +30,7 @@ test("dashboard opens and navigates through main views", async ({ page }) => {
       },
     });
   });
-  await page.route("http://localhost:6000/api/market-data/bitcoin/indicators?**", async (route) => {
+  await page.route("http://localhost:6002/api/market-data/bitcoin/indicators?**", async (route) => {
     await route.fulfill({
       json: {
         coinId: "bitcoin",
@@ -48,16 +48,16 @@ test("dashboard opens and navigates through main views", async ({ page }) => {
       },
     });
   });
-  await page.route("http://localhost:6000/api/analysis/history?**", async (route) => {
+  await page.route("http://localhost:6002/api/analysis/history?**", async (route) => {
     await route.fulfill({ json: { items: [], totalCount: 0, offset: 0, limit: 25 } });
   });
-  await page.route("http://localhost:6000/api/analysis/history/bitcoin?**", async (route) => {
+  await page.route("http://localhost:6002/api/analysis/history/bitcoin?**", async (route) => {
     await route.fulfill({ json: [] });
   });
-  await page.route("http://localhost:6000/api/market-data/snapshots?**", async (route) => {
+  await page.route("http://localhost:6002/api/market-data/snapshots?**", async (route) => {
     await route.fulfill({ json: { items: [], totalCount: 0, offset: 0, limit: 25 } });
   });
-  await page.route("http://localhost:6000/api/system/status", async (route) => {
+  await page.route("http://localhost:6002/api/system/status", async (route) => {
     await route.fulfill({
       json: {
         status: "ok",

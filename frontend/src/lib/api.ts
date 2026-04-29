@@ -143,7 +143,7 @@ export type CsrfTokenResponse = {
   token: string;
 };
 
-const apiBaseUrl = process.env.NEXT_PUBLIC_API_BASE_URL ?? "http://localhost:6000";
+const apiBaseUrl = process.env.NEXT_PUBLIC_API_BASE_URL ?? "http://localhost:6002";
 let csrfToken: string | null = null;
 
 async function getJson<T>(path: string): Promise<T> {

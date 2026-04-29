@@ -35,7 +35,7 @@ http://localhost:6001
 Backend URL:
 
 ```text
-http://localhost:6000
+http://localhost:6002
 ```
 
 ## Secrets

@@ -20,7 +20,7 @@ http://localhost:6001
 The frontend expects the local backend at:
 
 ```text
-http://localhost:6000
+http://localhost:6002
 ```
 
 Configured through:

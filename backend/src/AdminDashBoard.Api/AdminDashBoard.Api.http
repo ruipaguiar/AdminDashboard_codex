@@ -1,4 +1,4 @@
-@AdminDashBoard.Api_HostAddress = http://localhost:6000
+@AdminDashBoard.Api_HostAddress = http://localhost:6002
 
 GET {{AdminDashBoard.Api_HostAddress}}/health
 Accept: application/json
