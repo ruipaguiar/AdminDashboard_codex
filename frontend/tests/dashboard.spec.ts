@@ -1,7 +1,7 @@
 import { expect, test } from "@playwright/test";
 
 test("dashboard opens and navigates through main views", async ({ page }) => {
-  await page.route("http://localhost:5160/api/market-data/bitcoin?**", async (route) => {
+  await page.route("http://localhost:6000/api/market-data/bitcoin?**", async (route) => {
     await route.fulfill({
       json: {
         coinId: "bitcoin",
@@ -27,7 +27,7 @@ test("dashboard opens and navigates through main views", async ({ page }) => {
       },
     });
   });
-  await page.route("http://localhost:5160/api/market-data/bitcoin/indicators?**", async (route) => {
+  await page.route("http://localhost:6000/api/market-data/bitcoin/indicators?**", async (route) => {
     await route.fulfill({
       json: {
         coinId: "bitcoin",
@@ -45,16 +45,16 @@ test("dashboard opens and navigates through main views", async ({ page }) => {
       },
     });
   });
-  await page.route("http://localhost:5160/api/analysis/history?**", async (route) => {
+  await page.route("http://localhost:6000/api/analysis/history?**", async (route) => {
     await route.fulfill({ json: { items: [], totalCount: 0, offset: 0, limit: 25 } });
   });
-  await page.route("http://localhost:5160/api/analysis/history/bitcoin?**", async (route) => {
+  await page.route("http://localhost:6000/api/analysis/history/bitcoin?**", async (route) => {
     await route.fulfill({ json: [] });
   });
-  await page.route("http://localhost:5160/api/market-data/snapshots?**", async (route) => {
+  await page.route("http://localhost:6000/api/market-data/snapshots?**", async (route) => {
     await route.fulfill({ json: { items: [], totalCount: 0, offset: 0, limit: 25 } });
   });
-  await page.route("http://localhost:5160/api/system/status", async (route) => {
+  await page.route("http://localhost:6000/api/system/status", async (route) => {
     await route.fulfill({
       json: {
         status: "ok",
@@ -77,7 +77,7 @@ test("dashboard opens and navigates through main views", async ({ page }) => {
           baseUrl: "https://api.openai.com/",
         },
         cors: {
-          allowedOrigins: ["http://localhost:3000"],
+          allowedOrigins: ["http://localhost:6001"],
         },
       },
     });

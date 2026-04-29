@@ -15,7 +15,7 @@ AdminDasboard is a local-first full-stack crypto analytics dashboard.
 ```bash
 dotnet build AdminDasboard.slnx
 dotnet test AdminDasboard.slnx --no-build
-dotnet run --project backend/src/AdminDasboard.Api/AdminDasboard.Api.csproj --urls http://localhost:5160
+dotnet run --project backend/src/AdminDasboard.Api/AdminDasboard.Api.csproj
 ```
 
 ## Frontend
@@ -29,13 +29,13 @@ npm run dev
 Frontend URL:
 
 ```text
-http://localhost:3000
+http://localhost:6001
 ```
 
 Backend URL:
 
 ```text
-http://localhost:5160
+http://localhost:6000
 ```
 
 ## Secrets
@@ -47,11 +47,3 @@ dotnet user-secrets set "ConnectionStrings:Postgres" "..." --project backend/src
 dotnet user-secrets set "OpenAI:ApiKey" "..." --project backend/src/AdminDasboard.Api/AdminDasboard.Api.csproj
 ```
 
-OpenAI API billing is separate from a ChatGPT subscription. The dashboard uses the configured
-OpenAI API key only on the backend; no AI secret is exposed to the frontend.
-
-
-
-Tarefas:
-mudas as portas da apps locais para range de 6000
-Api => 6000 e site para 6001

@@ -169,7 +169,7 @@ export function DashboardShell() {
         <div className="mt-8 border-t border-white/10 pt-5">
           <div className="flex items-center gap-2 px-2 text-xs text-slate-400">
             <Server className="size-4" aria-hidden="true" />
-            <span>API http://localhost:5160</span>
+            <span>API http://localhost:6000</span>
           </div>
         </div>
       </aside>
@@ -1276,7 +1276,7 @@ function ErrorState() {
   return (
     <div className="rounded-lg border border-rose-400/30 bg-rose-950/20 p-5 text-rose-100">
       <div className="font-semibold">Backend unavailable</div>
-      <div className="mt-1 text-sm text-rose-200/80">Check that the API is running on http://localhost:5160.</div>
+      <div className="mt-1 text-sm text-rose-200/80">Check that the API is running on http://localhost:6000.</div>
     </div>
   );
 }

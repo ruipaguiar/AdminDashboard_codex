@@ -14,13 +14,13 @@ npm run build
 The development server runs at:
 
 ```text
-http://localhost:3000
+http://localhost:6001
 ```
 
 The frontend expects the local backend at:
 
 ```text
-http://localhost:5160
+http://localhost:6000
 ```
 
 Configured through:
