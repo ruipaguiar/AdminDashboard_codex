@@ -1,11 +1,13 @@
 using AdminDashBoard.Api.MarketData;
 using AdminDashBoard.Application.MarketData;
 using AdminDashBoard.Application.TechnicalIndicators;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace AdminDashBoard.Api.Controllers;
 
 [ApiController]
+[Authorize]
 [Route("api/market-data")]
 public sealed class MarketDataController : ControllerBase
 {

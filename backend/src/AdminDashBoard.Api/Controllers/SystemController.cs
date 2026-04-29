@@ -1,6 +1,7 @@
 using AdminDashBoard.Infrastructure.Analysis;
 using AdminDashBoard.Infrastructure.MarketData;
 using AdminDashBoard.Infrastructure.Persistence;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
@@ -9,6 +10,7 @@ using Microsoft.Extensions.Options;
 namespace AdminDashBoard.Api.Controllers;
 
 [ApiController]
+[Authorize]
 [Route("api/system")]
 public sealed class SystemController : ControllerBase
 {

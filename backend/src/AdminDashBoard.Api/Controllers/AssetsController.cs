@@ -1,10 +1,12 @@
 using AdminDashBoard.Application.Assets;
 using AdminDashBoard.Application.MarketData;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace AdminDashBoard.Api.Controllers;
 
 [ApiController]
+[Authorize]
 [Route("api/assets")]
 public sealed class AssetsController : ControllerBase
 {

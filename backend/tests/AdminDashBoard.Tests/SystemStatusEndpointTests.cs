@@ -16,7 +16,7 @@ public sealed class SystemStatusEndpointTests : IClassFixture<WebApplicationFact
     [Fact]
     public async Task GetSystemStatus_ReturnsNonSecretOperationalStatus()
     {
-        using var client = _factory.CreateClient();
+        using var client = await _factory.CreateAuthenticatedClientAsync();
 
         var response = await client.GetAsync("/api/system/status");
         var payload = await response.Content.ReadFromJsonAsync<SystemStatusResponse>();

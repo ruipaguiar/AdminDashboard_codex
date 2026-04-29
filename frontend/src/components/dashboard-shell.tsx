@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { FormEvent, useMemo, useState } from "react";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import {
   Activity,
@@ -8,7 +8,9 @@ import {
   Bot,
   Coins,
   Database,
+  KeyRound,
   LineChart,
+  LogOut,
   RefreshCw,
   Search,
   Server,
@@ -31,6 +33,7 @@ import {
   AnalysisResponse,
   apiBaseUrl,
   AssetSearchResult,
+  changePassword,
   createAnalysis,
   Currency,
   getAnalysisHistory,
@@ -62,7 +65,13 @@ const pageSize = 25;
 type DashboardView = "markets" | "snapshots" | "analysis" | "settings";
 type RiskFilter = "all" | "low" | "medium" | "high";
 
-export function DashboardShell() {
+export function DashboardShell({
+  currentUserEmail,
+  onLogout,
+}: {
+  currentUserEmail: string;
+  onLogout: () => void;
+}) {
   const [view, setView] = useState<DashboardView>("markets");
   const [selectedAsset, setSelectedAsset] = useState<AssetSearchResult>(defaultAsset);
   const [assetSearch, setAssetSearch] = useState("");
@@ -171,6 +180,14 @@ export function DashboardShell() {
             <Server className="size-4" aria-hidden="true" />
             <span>API http://localhost:6000</span>
           </div>
+          <button
+            type="button"
+            onClick={onLogout}
+            className="mt-4 flex h-10 w-full items-center gap-3 rounded-md px-3 text-sm text-slate-400 transition hover:bg-white/5 hover:text-slate-200"
+          >
+            <LogOut className="size-4" aria-hidden="true" />
+            <span>Logout</span>
+          </button>
         </div>
       </aside>
 
@@ -182,6 +199,7 @@ export function DashboardShell() {
               <h1 className="mt-1 text-2xl font-semibold text-slate-50 md:text-3xl">
                 Crypto analytics
               </h1>
+              <div className="mt-1 text-sm text-slate-400">{currentUserEmail}</div>
             </div>
 
             <div className="flex flex-col gap-3 md:flex-row md:items-center">
@@ -251,6 +269,15 @@ export function DashboardShell() {
               >
                 <RefreshCw className={cn("size-4", isRefreshing && "animate-spin")} />
               </button>
+              <button
+                type="button"
+                onClick={onLogout}
+                className="grid size-10 place-items-center rounded-md border border-white/10 bg-[#151b23] text-slate-200 transition hover:bg-[#1c2631] lg:hidden"
+                title="Logout"
+                aria-label="Logout"
+              >
+                <LogOut className="size-4" aria-hidden="true" />
+              </button>
             </div>
           </div>
         </header>
@@ -292,6 +319,7 @@ export function DashboardShell() {
               <SettingsPanel
                 status={statusQuery.data}
                 loading={statusQuery.isLoading}
+                currentUserEmail={currentUserEmail}
                 onTestSearch={() => {
                   setAssetSearch("bitcoin");
                   setAssetPickerOpen(true);
@@ -724,10 +752,12 @@ function RiskBadge({ risk }: { risk: "low" | "medium" | "high" }) {
 function SettingsPanel({
   status,
   loading,
+  currentUserEmail,
   onTestSearch,
 }: {
   status?: SystemStatusResponse;
   loading: boolean;
+  currentUserEmail: string;
   onTestSearch: () => void;
 }) {
   if (loading) {
@@ -795,7 +825,121 @@ function SettingsPanel({
           ))}
         </div>
       </div>
+
+      <PasswordCard currentUserEmail={currentUserEmail} />
     </div>
+  );
+}
+
+function PasswordCard({ currentUserEmail }: { currentUserEmail: string }) {
+  const [currentPassword, setCurrentPassword] = useState("");
+  const [newPassword, setNewPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
+  const [localError, setLocalError] = useState<string | null>(null);
+  const passwordMutation = useMutation({
+    mutationFn: () => changePassword(currentPassword, newPassword),
+    onSuccess: () => {
+      setCurrentPassword("");
+      setNewPassword("");
+      setConfirmPassword("");
+      setLocalError(null);
+    },
+  });
+
+  const onSubmit = (event: FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    if (newPassword !== confirmPassword) {
+      setLocalError("The new passwords do not match.");
+      return;
+    }
+
+    if (newPassword.length < 8) {
+      setLocalError("Use at least 8 characters.");
+      return;
+    }
+
+    setLocalError(null);
+    passwordMutation.mutate();
+  };
+
+  return (
+    <form onSubmit={onSubmit} className="rounded-lg border border-white/10 bg-[#11161d] p-4">
+      <div className="flex items-start gap-3">
+        <div className="grid size-9 shrink-0 place-items-center rounded-md bg-white/10 text-teal-200">
+          <KeyRound className="size-4" aria-hidden="true" />
+        </div>
+        <div>
+          <h2 className="text-base font-semibold text-slate-50">Password</h2>
+          <p className="mt-1 text-sm text-slate-400">{currentUserEmail}</p>
+        </div>
+      </div>
+
+      <div className="mt-4 grid gap-4 md:grid-cols-3">
+        <PasswordInput
+          label="Current password"
+          value={currentPassword}
+          autoComplete="current-password"
+          onChange={setCurrentPassword}
+        />
+        <PasswordInput
+          label="New password"
+          value={newPassword}
+          autoComplete="new-password"
+          onChange={setNewPassword}
+        />
+        <PasswordInput
+          label="Confirm password"
+          value={confirmPassword}
+          autoComplete="new-password"
+          onChange={setConfirmPassword}
+        />
+      </div>
+
+      {localError || passwordMutation.isError ? (
+        <div className="mt-4 rounded-md border border-rose-400/30 bg-rose-950/20 p-3 text-sm text-rose-100">
+          {localError ?? passwordMutation.error?.message ?? "Could not update password."}
+        </div>
+      ) : null}
+
+      {passwordMutation.isSuccess ? (
+        <div className="mt-4 rounded-md border border-emerald-400/30 bg-emerald-950/20 p-3 text-sm text-emerald-100">
+          Password updated.
+        </div>
+      ) : null}
+
+      <button
+        type="submit"
+        disabled={passwordMutation.isPending}
+        className="mt-4 h-10 rounded-md bg-teal-400 px-4 text-sm font-semibold text-slate-950 transition hover:bg-teal-300 disabled:cursor-not-allowed disabled:opacity-60"
+      >
+        {passwordMutation.isPending ? "Updating..." : "Update password"}
+      </button>
+    </form>
+  );
+}
+
+function PasswordInput({
+  label,
+  value,
+  autoComplete,
+  onChange,
+}: {
+  label: string;
+  value: string;
+  autoComplete: string;
+  onChange: (value: string) => void;
+}) {
+  return (
+    <label className="block">
+      <span className="text-sm font-medium text-slate-300">{label}</span>
+      <input
+        value={value}
+        onChange={(event) => onChange(event.target.value)}
+        type="password"
+        autoComplete={autoComplete}
+        className="mt-2 h-10 w-full rounded-md border border-white/10 bg-[#151b23] px-3 text-sm outline-none ring-teal-300/40 focus:ring-2"
+      />
+    </label>
   );
 }
 

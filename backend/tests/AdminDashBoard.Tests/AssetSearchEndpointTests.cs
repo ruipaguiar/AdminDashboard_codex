@@ -19,7 +19,7 @@ public sealed class AssetSearchEndpointTests : IClassFixture<WebApplicationFacto
     [Fact]
     public async Task SearchAssets_WithShortQuery_ReturnsValidationProblem()
     {
-        using var client = _factory.CreateClient();
+        using var client = await _factory.CreateAuthenticatedClientAsync();
 
         var response = await client.GetAsync("/api/assets/search?query=b");
 
@@ -29,7 +29,7 @@ public sealed class AssetSearchEndpointTests : IClassFixture<WebApplicationFacto
     [Fact]
     public async Task SearchAssets_WithValidQuery_ReturnsAssets()
     {
-        using var client = _factory
+        using var client = await _factory
             .WithWebHostBuilder(builder =>
             {
                 builder.ConfigureTestServices(services =>
@@ -37,7 +37,7 @@ public sealed class AssetSearchEndpointTests : IClassFixture<WebApplicationFacto
                     services.AddScoped<IAssetSearchService, FakeAssetSearchService>();
                 });
             })
-            .CreateClient();
+            .CreateAuthenticatedClientAsync();
 
         var response = await client.GetAsync("/api/assets/search?query=bit&limit=5");
         var payload = await response.Content.ReadFromJsonAsync<AssetSearchResultResponse[]>();

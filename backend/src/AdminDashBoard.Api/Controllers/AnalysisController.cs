@@ -2,11 +2,13 @@ using AdminDashBoard.Api.Analysis;
 using AdminDashBoard.Api.MarketData;
 using AdminDashBoard.Application.Analysis;
 using AdminDashBoard.Application.MarketData;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace AdminDashBoard.Api.Controllers;
 
 [ApiController]
+[Authorize]
 [Route("api/analysis")]
 public sealed class AnalysisController : ControllerBase
 {

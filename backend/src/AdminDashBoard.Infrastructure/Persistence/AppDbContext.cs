@@ -1,5 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using AdminDashBoard.Domain.Analysis;
+using AdminDashBoard.Domain.Auth;
 using AdminDashBoard.Domain.MarketData;
 
 namespace AdminDashBoard.Infrastructure.Persistence;
@@ -14,6 +15,8 @@ public sealed class AppDbContext : DbContext
     public DbSet<MarketDataSnapshot> MarketDataSnapshots => Set<MarketDataSnapshot>();
 
     public DbSet<AnalysisRecord> AnalysisRecords => Set<AnalysisRecord>();
+
+    public DbSet<UserAccount> UserAccounts => Set<UserAccount>();
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -79,6 +82,24 @@ public sealed class AppDbContext : DbContext
                 record.Days,
                 record.CreatedAtUtc
             });
+        });
+
+        modelBuilder.Entity<UserAccount>(entity =>
+        {
+            entity.ToTable("user_accounts");
+
+            entity.HasKey(account => account.Id);
+
+            entity.Property(account => account.Email)
+                .HasMaxLength(320)
+                .IsRequired();
+
+            entity.Property(account => account.PasswordHash)
+                .HasMaxLength(512)
+                .IsRequired();
+
+            entity.HasIndex(account => account.Email)
+                .IsUnique();
         });
     }
 }

@@ -1,10 +1,10 @@
-import { DashboardShell } from "@/components/dashboard-shell";
+import { AuthGate } from "@/components/auth-gate";
 import { QueryProvider } from "@/components/query-provider";
 
 export default function Home() {
   return (
     <QueryProvider>
-      <DashboardShell />
+      <AuthGate />
     </QueryProvider>
   );
 }

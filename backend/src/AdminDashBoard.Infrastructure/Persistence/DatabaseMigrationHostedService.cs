@@ -1,3 +1,4 @@
+using AdminDashBoard.Infrastructure.Auth;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -26,6 +27,9 @@ public sealed class DatabaseMigrationHostedService : IHostedService
         _logger.LogInformation("Applying database migrations.");
         await dbContext.Database.MigrateAsync(cancellationToken);
         _logger.LogInformation("Database migrations applied.");
+
+        var defaultUserSeeder = scope.ServiceProvider.GetRequiredService<DefaultUserSeeder>();
+        await defaultUserSeeder.SeedAsync(cancellationToken);
     }
 
     public Task StopAsync(CancellationToken cancellationToken)

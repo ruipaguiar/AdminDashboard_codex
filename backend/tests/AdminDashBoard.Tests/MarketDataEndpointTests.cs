@@ -20,7 +20,7 @@ public sealed class MarketDataEndpointTests : IClassFixture<WebApplicationFactor
     [Fact]
     public async Task GetMarketData_WithInvalidCurrency_ReturnsValidationProblem()
     {
-        using var client = _factory.CreateClient();
+        using var client = await _factory.CreateAuthenticatedClientAsync();
 
         var response = await client.GetAsync("/api/market-data/bitcoin?currency=gbp&days=30");
 
@@ -30,7 +30,7 @@ public sealed class MarketDataEndpointTests : IClassFixture<WebApplicationFactor
     [Fact]
     public async Task GetMarketData_WithValidRequest_ReturnsNormalizedPayload()
     {
-        using var client = _factory
+        using var client = await _factory
             .WithWebHostBuilder(builder =>
             {
                 builder.ConfigureTestServices(services =>
@@ -38,7 +38,7 @@ public sealed class MarketDataEndpointTests : IClassFixture<WebApplicationFactor
                     services.AddScoped<ICryptoMarketDataService, FakeMarketDataService>();
                 });
             })
-            .CreateClient();
+            .CreateAuthenticatedClientAsync();
 
         var response = await client.GetAsync("/api/market-data/bitcoin?currency=usd&days=7");
         var payload = await response.Content.ReadFromJsonAsync<CryptoMarketDataResponse>();
@@ -54,7 +54,7 @@ public sealed class MarketDataEndpointTests : IClassFixture<WebApplicationFactor
     [Fact]
     public async Task GetMarketDataIndicators_WithValidRequest_ReturnsTechnicalIndicators()
     {
-        using var client = _factory
+        using var client = await _factory
             .WithWebHostBuilder(builder =>
             {
                 builder.ConfigureTestServices(services =>
@@ -62,7 +62,7 @@ public sealed class MarketDataEndpointTests : IClassFixture<WebApplicationFactor
                     services.AddScoped<ICryptoMarketDataService, FakeMarketDataService>();
                 });
             })
-            .CreateClient();
+            .CreateAuthenticatedClientAsync();
 
         var response = await client.GetAsync("/api/market-data/bitcoin/indicators?currency=usd&days=7");
         var payload = await response.Content.ReadFromJsonAsync<TechnicalIndicatorsResponse>();
@@ -79,7 +79,7 @@ public sealed class MarketDataEndpointTests : IClassFixture<WebApplicationFactor
     [Fact]
     public async Task ListMarketDataSnapshots_WithValidFilters_ReturnsSnapshots()
     {
-        using var client = _factory
+        using var client = await _factory
             .WithWebHostBuilder(builder =>
             {
                 builder.ConfigureTestServices(services =>
@@ -87,7 +87,7 @@ public sealed class MarketDataEndpointTests : IClassFixture<WebApplicationFactor
                     services.AddScoped<IMarketDataSnapshotReader, FakeSnapshotReader>();
                 });
             })
-            .CreateClient();
+            .CreateAuthenticatedClientAsync();
 
         var response = await client.GetAsync("/api/market-data/snapshots?coinId=bitcoin&currency=eur&days=30&limit=10");
         var payload = await response.Content.ReadFromJsonAsync<MarketDataSnapshotListResponse>();
@@ -105,7 +105,7 @@ public sealed class MarketDataEndpointTests : IClassFixture<WebApplicationFactor
     [Fact]
     public async Task ListMarketDataSnapshots_WithInvalidCurrency_ReturnsValidationProblem()
     {
-        using var client = _factory.CreateClient();
+        using var client = await _factory.CreateAuthenticatedClientAsync();
 
         var response = await client.GetAsync("/api/market-data/snapshots?currency=gbp");
 

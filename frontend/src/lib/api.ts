@@ -135,16 +135,92 @@ export type SystemStatusResponse = {
   };
 };
 
+export type AuthUserResponse = {
+  email: string;
+};
+
+export type CsrfTokenResponse = {
+  token: string;
+};
+
 const apiBaseUrl = process.env.NEXT_PUBLIC_API_BASE_URL ?? "http://localhost:6000";
+let csrfToken: string | null = null;
 
 async function getJson<T>(path: string): Promise<T> {
-  const response = await fetch(`${apiBaseUrl}${path}`);
+  const response = await fetch(`${apiBaseUrl}${path}`, {
+    credentials: "include",
+  });
 
   if (!response.ok) {
     throw new Error(`Request failed with status ${response.status}`);
   }
 
   return response.json() as Promise<T>;
+}
+
+async function postJson<T>(
+  path: string,
+  body?: unknown,
+  expectedNoContent = false,
+  includeCsrf = true,
+): Promise<T> {
+  const headers: Record<string, string> = {
+    "Content-Type": "application/json",
+  };
+
+  if (includeCsrf) {
+    const token = await getCsrfToken();
+    headers["X-CSRF-TOKEN"] = token;
+  }
+
+  const response = await fetch(`${apiBaseUrl}${path}`, {
+    method: "POST",
+    credentials: "include",
+    headers,
+    body: body == null ? undefined : JSON.stringify(body),
+  });
+
+  if (!response.ok) {
+    const problem = await response.json().catch(() => null) as { title?: string; detail?: string; errors?: Record<string, string[]> } | null;
+    const firstError = problem?.errors ? Object.values(problem.errors)[0]?.[0] : undefined;
+    throw new Error(firstError ?? problem?.detail ?? problem?.title ?? `Request failed with status ${response.status}`);
+  }
+
+  if (expectedNoContent) {
+    return undefined as T;
+  }
+
+  return response.json() as Promise<T>;
+}
+
+export function getCurrentUser() {
+  return getJson<AuthUserResponse>("/api/auth/me");
+}
+
+export function login(email: string, password: string) {
+  csrfToken = null;
+  return postJson<AuthUserResponse>("/api/auth/login", { email, password }, false, false);
+}
+
+export function logout() {
+  return postJson<void>("/api/auth/logout", undefined, true)
+    .finally(() => {
+      csrfToken = null;
+    });
+}
+
+export function changePassword(currentPassword: string, newPassword: string) {
+  return postJson<void>("/api/auth/change-password", { currentPassword, newPassword }, true);
+}
+
+export async function getCsrfToken() {
+  if (csrfToken) {
+    return csrfToken;
+  }
+
+  const response = await getJson<CsrfTokenResponse>("/api/auth/csrf");
+  csrfToken = response.token;
+  return csrfToken;
 }
 
 export function getMarketData(coinId: string, currency: Currency, days: HistoryRange) {
@@ -170,10 +246,13 @@ export async function createAnalysis(
   currency: Currency,
   days: HistoryRange,
 ) {
+  const csrf = await getCsrfToken();
   const response = await fetch(`${apiBaseUrl}/api/analysis`, {
     method: "POST",
+    credentials: "include",
     headers: {
       "Content-Type": "application/json",
+      "X-CSRF-TOKEN": csrf,
     },
     body: JSON.stringify({ coinId, currency, days }),
   });

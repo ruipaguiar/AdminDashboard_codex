@@ -2,7 +2,9 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using AdminDashBoard.Application.Assets;
 using AdminDashBoard.Application.Analysis;
+using AdminDashBoard.Application.Auth;
 using AdminDashBoard.Application.MarketData;
+using AdminDashBoard.Infrastructure.Auth;
 using AdminDashBoard.Infrastructure.Analysis;
 using AdminDashBoard.Infrastructure.MarketData;
 using AdminDashBoard.Infrastructure.Persistence;
@@ -65,6 +67,9 @@ public static class DependencyInjection
             services.AddScoped<IMarketDataSnapshotStore, EfCoreMarketDataSnapshotStore>();
             services.AddScoped<IMarketDataSnapshotReader, EfCoreMarketDataSnapshotReader>();
             services.AddScoped<IAnalysisHistoryStore, EfCoreAnalysisHistoryStore>();
+            services.AddScoped<IUserAuthService, UserAuthService>();
+            services.AddSingleton<PasswordHashService>();
+            services.AddScoped<DefaultUserSeeder>();
         }
         else
         {
@@ -72,6 +77,7 @@ public static class DependencyInjection
             services.AddScoped<IMarketDataSnapshotStore, NoOpMarketDataSnapshotStore>();
             services.AddScoped<IMarketDataSnapshotReader, NoOpMarketDataSnapshotReader>();
             services.AddScoped<IAnalysisHistoryStore, NoOpAnalysisHistoryStore>();
+            services.AddSingleton<PasswordHashService>();
         }
 
         return services;

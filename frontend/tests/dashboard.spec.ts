@@ -1,6 +1,9 @@
 import { expect, test } from "@playwright/test";
 
 test("dashboard opens and navigates through main views", async ({ page }) => {
+  await page.route("http://localhost:6000/api/auth/me", async (route) => {
+    await route.fulfill({ json: { email: "ruipaguiar@gmail.com" } });
+  });
   await page.route("http://localhost:6000/api/market-data/bitcoin?**", async (route) => {
     await route.fulfill({
       json: {

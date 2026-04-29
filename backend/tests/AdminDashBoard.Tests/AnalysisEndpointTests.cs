@@ -22,7 +22,7 @@ public sealed class AnalysisEndpointTests : IClassFixture<WebApplicationFactory<
     [Fact]
     public async Task CreateAnalysis_WithInvalidRange_ReturnsValidationProblem()
     {
-        using var client = _factory.CreateClient();
+        using var client = await _factory.CreateAuthenticatedClientAsync();
 
         var response = await client.PostAsJsonAsync(
             "/api/analysis",
@@ -34,7 +34,7 @@ public sealed class AnalysisEndpointTests : IClassFixture<WebApplicationFactory<
     [Fact]
     public async Task CreateAnalysis_WithoutOpenAiKey_ReturnsConfigurationProblem()
     {
-        using var client = _factory.CreateClient();
+        using var client = await _factory.CreateAuthenticatedClientAsync();
 
         var response = await client.PostAsJsonAsync(
             "/api/analysis",
@@ -46,7 +46,7 @@ public sealed class AnalysisEndpointTests : IClassFixture<WebApplicationFactory<
     [Fact]
     public async Task CreateAnalysis_WithValidRequest_ReturnsStructuredAnalysis()
     {
-        using var client = _factory
+        using var client = await _factory
             .WithWebHostBuilder(builder =>
             {
                 builder.ConfigureTestServices(services =>
@@ -54,7 +54,7 @@ public sealed class AnalysisEndpointTests : IClassFixture<WebApplicationFactory<
                     services.AddScoped<IAnalysisService, FakeAnalysisService>();
                 });
             })
-            .CreateClient();
+            .CreateAuthenticatedClientAsync();
 
         var response = await client.PostAsJsonAsync(
             "/api/analysis",
@@ -70,7 +70,7 @@ public sealed class AnalysisEndpointTests : IClassFixture<WebApplicationFactory<
     [Fact]
     public async Task GetAnalysisHistory_WithValidRequest_ReturnsSavedItems()
     {
-        using var client = _factory
+        using var client = await _factory
             .WithWebHostBuilder(builder =>
             {
                 builder.ConfigureTestServices(services =>
@@ -78,7 +78,7 @@ public sealed class AnalysisEndpointTests : IClassFixture<WebApplicationFactory<
                     services.AddScoped<IAnalysisHistoryStore, FakeAnalysisHistoryStore>();
                 });
             })
-            .CreateClient();
+            .CreateAuthenticatedClientAsync();
 
         var response = await client.GetAsync("/api/analysis/history/bitcoin?currency=eur&days=30&limit=5");
         var payload = await response.Content.ReadFromJsonAsync<AnalysisHistoryItemResponse[]>();
@@ -95,7 +95,7 @@ public sealed class AnalysisEndpointTests : IClassFixture<WebApplicationFactory<
     [Fact]
     public async Task ListAnalysisHistory_WithRiskFilter_ReturnsSavedItems()
     {
-        using var client = _factory
+        using var client = await _factory
             .WithWebHostBuilder(builder =>
             {
                 builder.ConfigureTestServices(services =>
@@ -103,7 +103,7 @@ public sealed class AnalysisEndpointTests : IClassFixture<WebApplicationFactory<
                     services.AddScoped<IAnalysisHistoryStore, FakeAnalysisHistoryStore>();
                 });
             })
-            .CreateClient();
+            .CreateAuthenticatedClientAsync();
 
         var response = await client.GetAsync("/api/analysis/history?riskLevel=medium&limit=25");
         var payload = await response.Content.ReadFromJsonAsync<AnalysisHistoryListResponse>();
@@ -118,7 +118,7 @@ public sealed class AnalysisEndpointTests : IClassFixture<WebApplicationFactory<
     [Fact]
     public async Task ListAnalysisHistory_WithInvalidRiskFilter_ReturnsValidationProblem()
     {
-        using var client = _factory.CreateClient();
+        using var client = await _factory.CreateAuthenticatedClientAsync();
 
         var response = await client.GetAsync("/api/analysis/history?riskLevel=extreme");
 
