@@ -1,0 +1,11 @@
+@AdminDasboard.Api_HostAddress = http://localhost:5119
+
+GET {{AdminDasboard.Api_HostAddress}}/health
+Accept: application/json
+
+###
+
+GET {{AdminDasboard.Api_HostAddress}}/api/market-data/bitcoin?currency=eur&days=30
+Accept: application/json
+
+###
