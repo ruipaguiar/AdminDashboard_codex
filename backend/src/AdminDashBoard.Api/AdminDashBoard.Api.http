@@ -1,0 +1,11 @@
+@AdminDashBoard.Api_HostAddress = http://localhost:6000
+
+GET {{AdminDashBoard.Api_HostAddress}}/health
+Accept: application/json
+
+###
+
+GET {{AdminDashBoard.Api_HostAddress}}/api/market-data/bitcoin?currency=eur&days=30
+Accept: application/json
+
+###

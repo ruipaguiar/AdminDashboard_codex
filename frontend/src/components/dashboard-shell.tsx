@@ -153,7 +153,7 @@ export function DashboardShell() {
             <Coins className="size-5" aria-hidden="true" />
           </div>
           <div>
-            <div className="text-sm font-semibold">AdminDasboard</div>
+            <div className="text-sm font-semibold">AdminDashBoard</div>
             <div className="text-xs text-slate-400">Local analytics</div>
           </div>
         </div>

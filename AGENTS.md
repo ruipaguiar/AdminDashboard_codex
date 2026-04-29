@@ -2,7 +2,7 @@
 
 ## Project
 
-AdminDasboard is a local-first full-stack crypto analytics dashboard.
+AdminDashBoard is a local-first full-stack crypto analytics dashboard.
 
 Stack:
 - Frontend: Next.js, TypeScript, App Router, Tailwind CSS, shadcn/ui
@@ -11,7 +11,7 @@ Stack:
 - Market data: CoinGecko API
 - AI analysis: Claude API via backend only
 
-AdminDasboard allows the user to select a crypto asset, view market data and historical charts, calculate technical indicators, and request an AI-assisted analysis.
+AdminDashBoard allows the user to select a crypto asset, view market data and historical charts, calculate technical indicators, and request an AI-assisted analysis.
 
 ## Working rules
 
@@ -54,11 +54,11 @@ Use:
 
 Suggested backend structure:
 
-/backend/src/AdminDasboard.Api
-/backend/src/AdminDasboard.Application
-/backend/src/AdminDasboard.Domain
-/backend/src/AdminDasboard.Infrastructure
-/backend/tests/AdminDasboard.Tests
+/backend/src/AdminDashBoard.Api
+/backend/src/AdminDashBoard.Application
+/backend/src/AdminDashBoard.Domain
+/backend/src/AdminDashBoard.Infrastructure
+/backend/tests/AdminDashBoard.Tests
 
 API constraints:
 - Allowed currencies initially: eur, usd
@@ -129,6 +129,6 @@ npm run dev
 Backend:
 ```bash
 
-dotnet build AdminDasboard.slnx
-dotnet test AdminDasboard.slnx --no-build
+dotnet build AdminDashBoard.slnx
+dotnet test AdminDashBoard.slnx --no-build
 ```

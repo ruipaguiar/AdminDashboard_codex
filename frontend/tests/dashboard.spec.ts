@@ -85,7 +85,7 @@ test("dashboard opens and navigates through main views", async ({ page }) => {
 
   await page.goto("/");
 
-  await expect(page.getByText("AdminDasboard").first()).toBeVisible();
+  await expect(page.getByText("AdminDashBoard").first()).toBeVisible();
   await expect(page.getByRole("heading", { name: "Crypto analytics" })).toBeVisible();
 
   await page.getByRole("button", { name: "Snapshots" }).click();

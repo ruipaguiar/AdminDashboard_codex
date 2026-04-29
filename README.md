@@ -1,6 +1,6 @@
-# AdminDasboard
+# AdminDashBoard
 
-AdminDasboard is a local-first full-stack crypto analytics dashboard.
+AdminDashBoard is a local-first full-stack crypto analytics dashboard.
 
 ## Stack
 
@@ -13,9 +13,9 @@ AdminDasboard is a local-first full-stack crypto analytics dashboard.
 ## Backend
 
 ```bash
-dotnet build AdminDasboard.slnx
-dotnet test AdminDasboard.slnx --no-build
-dotnet run --project backend/src/AdminDasboard.Api/AdminDasboard.Api.csproj
+dotnet build AdminDashBoard.slnx
+dotnet test AdminDashBoard.slnx --no-build
+dotnet run --project backend/src/AdminDashBoard.Api/AdminDashBoard.Api.csproj
 ```
 
 ## Frontend
@@ -43,7 +43,7 @@ http://localhost:6000
 Real secrets are stored outside the repository with .NET user-secrets.
 
 ```bash
-dotnet user-secrets set "ConnectionStrings:Postgres" "..." --project backend/src/AdminDasboard.Api/AdminDasboard.Api.csproj
-dotnet user-secrets set "OpenAI:ApiKey" "..." --project backend/src/AdminDasboard.Api/AdminDasboard.Api.csproj
+dotnet user-secrets set "ConnectionStrings:Postgres" "..." --project backend/src/AdminDashBoard.Api/AdminDashBoard.Api.csproj
+dotnet user-secrets set "OpenAI:ApiKey" "..." --project backend/src/AdminDashBoard.Api/AdminDashBoard.Api.csproj
 ```
 

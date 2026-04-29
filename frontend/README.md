@@ -1,6 +1,6 @@
-# AdminDasboard Frontend
+# AdminDashBoard Frontend
 
-Next.js App Router frontend for AdminDasboard.
+Next.js App Router frontend for AdminDashBoard.
 
 ## Commands
 

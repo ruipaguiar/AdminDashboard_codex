@@ -1,0 +1,12 @@
+<Solution>
+  <Folder Name="/backend/" />
+  <Folder Name="/backend/src/">
+    <Project Path="backend/src/AdminDashBoard.Api/AdminDashBoard.Api.csproj" />
+    <Project Path="backend/src/AdminDashBoard.Application/AdminDashBoard.Application.csproj" />
+    <Project Path="backend/src/AdminDashBoard.Domain/AdminDashBoard.Domain.csproj" />
+    <Project Path="backend/src/AdminDashBoard.Infrastructure/AdminDashBoard.Infrastructure.csproj" />
+  </Folder>
+  <Folder Name="/backend/tests/">
+    <Project Path="backend/tests/AdminDashBoard.Tests/AdminDashBoard.Tests.csproj" />
+  </Folder>
+</Solution>
